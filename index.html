@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Inventario</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Cargamos Supabase desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <!-- Sección de Login -->
+    <div id="login-container" class="container">
+        <h2>Iniciar Sesión</h2>
+        <form id="login-form">
+            <input type="email" id="login-email" placeholder="Correo electrónico" required>
+            <input type="password" id="login-password" placeholder="Contraseña" required>
+            <button type="submit">Entrar</button>
+        </form>
+    </div>
+
+    <!-- Sección de Inventario (Oculta al principio) -->
+    <div id="app-container" class="container hidden">
+        <div class="header">
+            <h2>Registro de Inventario</h2>
+            <button id="btn-logout">Cerrar Sesión</button>
+        </div>
+
+        <form id="inventario-form">
+            <div class="form-group">
+                <label>Producto:</label>
+                <input type="text" id="producto" required>
+            </div>
+            <div class="form-group">
+                <label>¿Dónde se compró? (Lugar/Plataforma):</label>
+                <input type="text" id="donde_compro">
+            </div>
+            <div class="form-group">
+                <label>Tienda específica:</label>
+                <input type="text" id="tienda">
+            </div>
+            <div class="form-group">
+                <label>Fecha de compra:</label>
+                <input type="date" id="fecha">
+            </div>
+            <div class="form-group">
+                <label>Precio Real:</label>
+                <input type="number" step="0.01" id="precio_real">
+            </div>
+            <div class="form-group">
+                <label>Precio de Boleta:</label>
+                <input type="number" step="0.01" id="precio_boleta">
+            </div>
+            <div class="form-group">
+                <label>Subir Boleta/Imagen (PDF, PNG, JPG):</label>
+                <input type="file" id="archivo" accept="image/*,application/pdf">
+            </div>
+            <button type="submit">Guardar Producto</button>
+        </form>
+
+        <h3>Productos Registrados</h3>
+        <div id="lista-productos"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
