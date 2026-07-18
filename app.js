@@ -1,7 +1,7 @@
 // CONFIGURACIÓN DE SUPABASE
-const SUPABASE_URL = "https://fnnbiavucfgjqyrepzkw";
+const SUPABASE_URL = "https://fnnbiavucfgjqyrepzkw.supabase.co";
 const SUPABASE_KEY = "sb_publishable_L6F_zQiQS08gVeas9ePvqQ_4MDWO0RQ";
-const supabase = supabaseClient.createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ELEMENTOS DEL DOM
 const loginContainer = document.getElementById('login-container');
@@ -14,7 +14,7 @@ const btnLogout = document.getElementById('btn-logout');
 let usuarioActual = null;
 
 // 1. CONTROL DE SESIÓN (LOGIN / LOGOUT)
-supabase.auth.onAuthStateChange((event, session) => {
+supabaseClient.auth.onAuthStateChange((event, session) => {
     if (session) {
         usuarioActual = session.user;
         loginContainer.classList.add('hidden');
@@ -32,12 +32,12 @@ loginForm.addEventListener('submit', async (e) => {
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
     if (error) alert("Error: " + error.message);
 });
 
 btnLogout.addEventListener('click', async () => {
-    await supabase.auth.signOut();
+    await supabaseClient.auth.signOut();
 });
 
 // 2. GUARDAR PRODUCTO E INVENTARIO
@@ -60,7 +60,7 @@ inventarioForm.addEventListener('submit', async (e) => {
         const fileName = `${Date.now()}.${fileExt}`;
         const filePath = `${usuarioActual.id}/${fileName}`;
 
-        const { data, error: uploadError } = await supabase.storage
+        const { data, error: uploadError } = await supabaseClient.storage
             .from('comprobantes')
             .upload(filePath, archivoInput);
 
@@ -70,12 +70,12 @@ inventarioForm.addEventListener('submit', async (e) => {
         }
 
         // Obtener URL pública del archivo
-        const { data: urlData } = supabase.storage.from('comprobantes').getPublicUrl(filePath);
+        const { data: urlData } = supabaseClient.storage.from('comprobantes').getPublicUrl(filePath);
         archivoUrl = urlData.publicUrl;
     }
 
     // Insertar en la base de datos
-    const { error } = await supabase.from('inventario').insert([
+    const { error } = await supabaseClient.from('inventario').insert([
         {
             usuario_id: usuarioActual.id,
             producto,
@@ -101,7 +101,7 @@ inventarioForm.addEventListener('submit', async (e) => {
 async function cargarProductos() {
     listaProductos.innerHTML = "Cargando...";
     
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
         .from('inventario')
         .select('*')
         .order('created_at', { ascending: false });
